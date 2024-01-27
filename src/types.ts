@@ -1,24 +1,24 @@
-export interface FirebaseConfigInterface {
+export interface FirebaseConfig {
   clientEmail: string;
   privateKey: string;
   projectId: string;
 }
 
-export interface GoogleCloudStorageConfigInterface {
+export interface GoogleCloudStorageConfig {
   bucketName: string;
   projectId: string;
   keyFilename: string;
   credentials: string;
 }
 
-export interface CreateFirebaseUploaderProps {
+interface CreateFirebaseUploaderProps {
   provider: "firebase";
-  config: FirebaseConfigInterface;
+  config: FirebaseConfig;
 }
 
-export interface CreateGoogleCloudStorageUploaderProps {
+interface CreateGoogleCloudStorageUploaderProps {
   provider: "google-cloud-storage";
-  config: GoogleCloudStorageConfigInterface;
+  config: GoogleCloudStorageConfig;
 }
 
 export type CreateUploaderProps =
