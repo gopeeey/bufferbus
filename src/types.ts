@@ -8,10 +8,17 @@ export interface FirebaseConfig {
 }
 
 export interface GoogleCloudStorageConfig {
-  bucketName: string;
+  bucket: string;
   projectId: string;
-  keyFilename: string;
-  credentials: string;
+  credentials: {
+    type: string;
+    project_id: string;
+    private_key_id: string;
+    private_key: string;
+    client_email: string;
+    client_id: string;
+    universe_domain: string;
+  };
 }
 
 interface CreateFirebaseUploaderProps {
@@ -31,4 +38,6 @@ export type CreateUploaderProps =
 export type UploadFileProps = {
   fileName: string;
   data: Buffer | Readable;
+  mimeType?: string;
+  public?: boolean;
 };
