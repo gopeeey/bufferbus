@@ -1,36 +1,26 @@
-import * as firebaseAdmin from "firebase-admin";
-import { Readable } from "stream";
-import { FirebaseConfig, UploadFileProps } from "./types";
+import { Storage } from "@google-cloud/storage";
+import { GoogleCloudStorageConfig, UploadFileProps } from "./types";
 import { toReadable } from "./utils";
 
-export const createFirebaseUploader = ({
-  clientEmail,
-  privateKey,
+export const createGoogleCloudStorageUploader = ({
   projectId,
+  credentials,
   bucket: storageBucket,
-}: FirebaseConfig) => {
-  const app = firebaseAdmin.initializeApp(
-    {
-      credential: firebaseAdmin.credential.cert({
-        clientEmail,
-        privateKey,
-        projectId,
-      }),
-      storageBucket,
-    },
-    "bufferbus-firebase-uploader"
-  );
+}: GoogleCloudStorageConfig) => {
+  const storage = new Storage({
+    projectId,
+    credentials,
+  });
 
-  return ({
+  return async ({
     fileName,
     data,
     mimeType,
     public: makePublic = true,
   }: UploadFileProps) => {
-    const bucket = app.storage().bucket();
-    let stream: Readable = toReadable(data);
+    const bucket = storage.bucket(storageBucket);
+    const stream = toReadable(data);
     const file = bucket.file(fileName);
-
     const uploadStream = file.createWriteStream({
       contentType: mimeType || "application/octet-stream",
       public: makePublic,
