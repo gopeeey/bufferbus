@@ -29,7 +29,7 @@ export const createFirebaseUploader = ({
       contentType: "application/octet-stream",
     });
 
-    const prom = new Promise<string>((res, rej) => {
+    const prom = new Promise<string>((res) => {
       uploadStream.on("close", async () => {
         await bucket.file(fileName).makePublic();
         const url = bucket.file(fileName).publicUrl();
