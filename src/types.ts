@@ -1,7 +1,10 @@
+import { Readable } from "stream";
+
 export interface FirebaseConfig {
   clientEmail: string;
   privateKey: string;
   projectId: string;
+  bucket: string;
 }
 
 export interface GoogleCloudStorageConfig {
@@ -24,3 +27,8 @@ interface CreateGoogleCloudStorageUploaderProps {
 export type CreateUploaderProps =
   | CreateFirebaseUploaderProps
   | CreateGoogleCloudStorageUploaderProps;
+
+export type UploadFileProps = {
+  fileName: string;
+  data: Buffer | Readable;
+};

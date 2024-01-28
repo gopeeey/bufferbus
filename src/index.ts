@@ -1,11 +1,13 @@
 import dotenv from "dotenv";
 import * as firebaseAdmin from "firebase-admin";
+import fs from "fs";
+import path from "path";
 import { Readable } from "stream";
+import { createFirebaseUploader } from "./firebase";
 
 dotenv.config();
 
-function main() {
-  console.log(process.env.FIREBASE_CLIENT_EMAIL);
+function main2() {
   const app = firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.cert({
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
@@ -18,7 +20,7 @@ function main() {
   const bucket = app.storage().bucket();
   const fileName = "hello_world.txt";
   const uploadStream = bucket.file(fileName).createWriteStream({
-    contentType: "text/plain",
+    contentType: "application/octet-stream",
   });
 
   //   const file = fs.createReadStream(path.join(__dirname, "../solar-system.jpg"));
@@ -38,6 +40,21 @@ function main() {
     const url = bucket.file(fileName).publicUrl();
     console.log(url);
   });
+}
+
+async function main() {
+  const uploadFile = createFirebaseUploader({
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL as string,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY as string,
+    projectId: process.env.FIREBASE_PROJECT_ID as string,
+    bucket: process.env.FIREBASE_STORAGE_BUCKET as string,
+  });
+  const url = await uploadFile({
+    fileName: "test.jpg",
+    data: fs.createReadStream(path.join(__dirname, "../solar-system.jpg")),
+  });
+
+  console.log("\n\n\nDOWNLOAD URL IS: ", url);
 }
 
 main();
