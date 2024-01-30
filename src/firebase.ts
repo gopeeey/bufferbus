@@ -1,7 +1,7 @@
 import * as firebaseAdmin from "firebase-admin";
 import { Readable } from "stream";
 import { FirebaseConfig, UploadFileProps } from "./types";
-import { toReadable } from "./utils";
+import { makeFileNameUnique, toReadable } from "./utils";
 
 export const createFirebaseUploader = ({
   clientEmail,
@@ -26,7 +26,9 @@ export const createFirebaseUploader = ({
     data,
     mimeType,
     public: makePublic = true,
+    overwriteDuplicate = true,
   }: UploadFileProps) => {
+    if (!overwriteDuplicate) fileName = makeFileNameUnique(fileName);
     const bucket = app.storage().bucket();
     let stream: Readable = toReadable(data);
     const file = bucket.file(fileName);
