@@ -1,6 +1,6 @@
 import { Storage } from "@google-cloud/storage";
 import { GoogleCloudStorageConfig, UploadFileProps } from "./types";
-import { toReadable } from "./utils";
+import { makeFileNameUnique, toReadable } from "./utils";
 
 export const createGoogleCloudStorageUploader = ({
   projectId,
@@ -17,7 +17,9 @@ export const createGoogleCloudStorageUploader = ({
     data,
     mimeType,
     public: makePublic = true,
+    overwriteDuplicate = true,
   }: UploadFileProps) => {
+    if (!overwriteDuplicate) fileName = makeFileNameUnique(fileName);
     const bucket = storage.bucket(storageBucket);
     const stream = toReadable(data);
     const file = bucket.file(fileName);

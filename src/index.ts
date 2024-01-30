@@ -52,6 +52,7 @@ async function main() {
     ),
     fileName: "something-else/news/solar-systemsas.jpg",
     public: true,
+    overwriteDuplicate: false,
   });
 
   console.log("\n\n\nFILE URL: ", file);

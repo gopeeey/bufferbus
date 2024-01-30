@@ -6,7 +6,7 @@ import {
 } from "@googleapis/drive";
 
 import { GoogleDriveConfig, UploadFileProps } from "./types";
-import { toReadable } from "./utils";
+import { makeFileNameUnique, toReadable } from "./utils";
 
 const createFolders = async (
   drive: drive_v3.Drive,
@@ -97,6 +97,7 @@ export const createGoogleDriveUploader = ({
     fileName,
     mimeType,
     public: makePublic,
+    overwriteDuplicate = true,
   }: UploadFileProps) => {
     const authClient = await auth.getClient({
       credentials,
@@ -105,6 +106,7 @@ export const createGoogleDriveUploader = ({
     const drive = googledrive({ version: "v3", auth: authClient });
     const stream = toReadable(data);
     let parentId: string | null = null;
+    if (!overwriteDuplicate) fileName = makeFileNameUnique(fileName);
 
     // Create folders if you have to
     const folders = fileName.split("/");

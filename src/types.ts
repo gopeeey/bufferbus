@@ -53,4 +53,5 @@ export type UploadFileProps = {
   data: Buffer | Readable;
   mimeType?: string;
   public?: boolean;
+  overwriteDuplicate?: boolean;
 };
