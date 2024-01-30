@@ -50,7 +50,7 @@ async function main() {
     data: fs.createReadStream(
       path.join(__dirname, "../../../../Pictures/solar-system.jpg")
     ),
-    fileName: "something/solar-system.jpg",
+    fileName: "something-else/news/solar-systemsas.jpg",
     public: true,
   });
 

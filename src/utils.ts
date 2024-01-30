@@ -13,3 +13,11 @@ export const toReadable = (data: Buffer | Readable) => {
   if (data instanceof Readable) return data;
   return bufferToReadable(data);
 };
+
+export const splitToNameAndExtension = (fileName: string) => {
+  const parts = fileName.split(".");
+  return [
+    parts.slice(0, parts.length - 1).join("."),
+    parts[parts.length - 1],
+  ] as const;
+};
