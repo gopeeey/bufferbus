@@ -28,6 +28,11 @@ export interface GoogleDriveConfig {
   sharedWithEmail?: string;
 }
 
+export interface AzureBlobStorageConfig {
+  storageConnectionString: string;
+  containerName: string;
+}
+
 interface CreateFirebaseUploaderProps {
   provider: "firebase";
   config: FirebaseConfig;
@@ -43,10 +48,16 @@ interface CreateGoogleDriveUploaderProps {
   config: GoogleDriveConfig;
 }
 
+interface CreateAzureBlobStorageUploaderProps {
+  provider: "azure-blob-storage";
+  config: AzureBlobStorageConfig;
+}
+
 export type CreateUploaderProps =
   | CreateFirebaseUploaderProps
   | CreateGoogleCloudStorageUploaderProps
-  | CreateGoogleDriveUploaderProps;
+  | CreateGoogleDriveUploaderProps
+  | CreateAzureBlobStorageUploaderProps;
 
 export type UploadFileProps = {
   fileName: string;
