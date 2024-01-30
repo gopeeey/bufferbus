@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
+import { createAzureStorageUploader } from "./azure";
 import { createFirebaseUploader } from "./firebase";
 import { createGoogleCloudStorageUploader } from "./google-cloud-storage";
 import { createGoogleDriveUploader } from "./google-drive";
@@ -19,6 +20,9 @@ export const createUploader = (props: CreateUploaderProps) => {
     case "google-drive":
       return createGoogleDriveUploader(props.config);
 
+    case "azure-blob-storage":
+      return createAzureStorageUploader(props.config);
+
     default:
       throw new Error(
         `Unsupported provider. Please provide one of these: ${[
@@ -31,18 +35,11 @@ export const createUploader = (props: CreateUploaderProps) => {
 
 async function main() {
   const uploader = createUploader({
-    provider: "google-drive",
+    provider: "azure-blob-storage",
     config: {
-      credentials: {
-        client_email: process.env.GCLOUD_CLIENT_EMAIL as string,
-        private_key: process.env.GCLOUD_PRIVATE_KEY as string,
-        project_id: process.env.GCLOUD_PROJECT_ID as string,
-        client_id: process.env.GCLOUD_CLIENT_ID as string,
-        private_key_id: process.env.GCLOUD_PRIVATE_KEY_ID as string,
-        universe_domain: process.env.GCLOUD_UNIVERSE_DOMAIN as string,
-        type: process.env.GCLOUD_TYPE as string,
-      },
-      sharedWithEmail: process.env.MY_EMAIL as string,
+      storageConnectionString: process.env
+        .AZURE_BLOB_STORAGE_CONNECTION_STRING as string,
+      containerName: process.env.AZURE_BLOB_STORAGE_CONTAINER_NAME as string,
     },
   });
 
