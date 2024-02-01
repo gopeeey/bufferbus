@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import { createAzureStorageUploader } from "./azure";
+import { createAwsS3Uploader } from "./aws-s3";
+import { createAzureStorageUploader } from "./azure-blob-storage";
 import { createFirebaseUploader } from "./firebase";
 import { createGoogleCloudStorageUploader } from "./google-cloud-storage";
 import { createGoogleDriveUploader } from "./google-drive";
@@ -23,11 +24,17 @@ export const createUploader = (props: CreateUploaderProps) => {
     case "azure-blob-storage":
       return createAzureStorageUploader(props.config);
 
+    case "aws-s3":
+      return createAwsS3Uploader(props.config);
+
     default:
       throw new Error(
         `Unsupported provider. Please provide one of these: ${[
           "firebase",
           "google-cloud-storage",
+          "google-drive",
+          "azure-blob-storage",
+          "aws-s3",
         ].join(", ")}`
       );
   }
@@ -35,11 +42,13 @@ export const createUploader = (props: CreateUploaderProps) => {
 
 async function main() {
   const uploader = createUploader({
-    provider: "azure-blob-storage",
+    provider: "aws-s3",
     config: {
-      storageConnectionString: process.env
-        .AZURE_BLOB_STORAGE_CONNECTION_STRING as string,
-      containerName: process.env.AZURE_BLOB_STORAGE_CONTAINER_NAME as string,
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+      bucket: process.env.AWS_S3_BUCKET as string,
+      region: process.env.AWS_S3_REGION as string,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+      bucketSupportsAccessControlList: false,
     },
   });
 
@@ -49,7 +58,7 @@ async function main() {
     ),
     fileName: "something-else/news/solar-systemsas.jpg",
     public: true,
-    overwriteDuplicate: false,
+    overwriteDuplicate: true,
   });
 
   console.log("\n\n\nFILE URL: ", file);

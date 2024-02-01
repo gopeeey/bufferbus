@@ -33,6 +33,17 @@ export interface AzureBlobStorageConfig {
   containerName: string;
 }
 
+export interface AwsS3Config {
+  accessKeyId: string;
+  secretAccessKey: string;
+  region: string;
+  bucket: string;
+  bucketSupportsAccessControlList: boolean;
+  queueSize?: number;
+  partSize?: number;
+  leavePartsOnError?: boolean;
+}
+
 interface CreateFirebaseUploaderProps {
   provider: "firebase";
   config: FirebaseConfig;
@@ -53,11 +64,17 @@ interface CreateAzureBlobStorageUploaderProps {
   config: AzureBlobStorageConfig;
 }
 
+interface CreateAwsS3UploaderProps {
+  provider: "aws-s3";
+  config: AwsS3Config;
+}
+
 export type CreateUploaderProps =
   | CreateFirebaseUploaderProps
   | CreateGoogleCloudStorageUploaderProps
   | CreateGoogleDriveUploaderProps
-  | CreateAzureBlobStorageUploaderProps;
+  | CreateAzureBlobStorageUploaderProps
+  | CreateAwsS3UploaderProps;
 
 export type UploadFileProps = {
   fileName: string;
