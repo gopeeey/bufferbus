@@ -45,27 +45,27 @@ export interface AwsS3Config {
 }
 
 interface CreateFirebaseUploaderProps {
-  provider: "firebase";
+  platform: "firebase";
   config: FirebaseConfig;
 }
 
 interface CreateGoogleCloudStorageUploaderProps {
-  provider: "google-cloud-storage";
+  platform: "google-cloud-storage";
   config: GoogleCloudStorageConfig;
 }
 
 interface CreateGoogleDriveUploaderProps {
-  provider: "google-drive";
+  platform: "google-drive";
   config: GoogleDriveConfig;
 }
 
 interface CreateAzureBlobStorageUploaderProps {
-  provider: "azure-blob-storage";
+  platform: "azure-blob-storage";
   config: AzureBlobStorageConfig;
 }
 
 interface CreateAwsS3UploaderProps {
-  provider: "aws-s3";
+  platform: "aws-s3";
   config: AwsS3Config;
 }
 
@@ -83,3 +83,7 @@ export type UploadFileProps = {
   public?: boolean;
   overwriteDuplicate?: boolean;
 };
+
+export type UploaderCreator = (
+  props: CreateUploaderProps["config"]
+) => (uploadProps: UploadFileProps) => Promise<string | null>;
