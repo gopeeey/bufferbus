@@ -51,7 +51,7 @@ const fileUrl = await uploadToFirebase({
 console.log(fileUrl);
 ```
 
-The data to be uploaded can either be a buffer, or a readable stream (to support infinitely large uploads) as seen in the example above.
+The data to be uploaded can either be a buffer, or a readable stream (to support super large uploads without affecting memory) as seen in the example above.
 
 The upload function returns a url that can be used to access the uploaded file (this may be null if explicitly specified that the file should not be public).
 
